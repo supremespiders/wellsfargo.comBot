@@ -46,7 +46,9 @@ namespace wellsfargo.comBot
             options.AddArgument("ignore-certificate-errors");
             options.AddArgument("no-sandbox");
             options.AddArgument($"--load-extension={_path}/ext");
-            _driver = new ChromeDriver(options);
+            ChromeDriverService service = ChromeDriverService.CreateDefaultService();
+            service.HideCommandPromptWindow = true;
+            _driver = new ChromeDriver(service,options);
             //_driver.LoadSession("https://www.wellsfargo.com/");
             _driver.Navigate().GoToUrl("https://www.wellsfargo.com/");
             await Task.Delay(25000);
@@ -637,7 +639,7 @@ namespace wellsfargo.comBot
             File.WriteAllText($"{_path}/ext/injector.js", s);
             try
             {
-                await MainWork();
+                await Task.Run(MainWork);
             }
             catch (KnownException knownException)
             {

@@ -650,7 +650,7 @@ namespace wellsfargo.comBot
             this.Name = "MainForm";
             this.Padding = new System.Windows.Forms.Padding(27, 74, 27, 25);
             this.Style = MetroFramework.MetroColorStyle.Orange;
-            this.Text = "         wellsfargo.comBot 1.00";
+            this.Text = "         wellsfargo.comBot 1.01";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
             this.Load += new System.EventHandler(this.Form1_Load);
             this.panel3.ResumeLayout(false);
