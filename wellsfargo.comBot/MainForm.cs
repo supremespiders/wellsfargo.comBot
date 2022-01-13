@@ -131,17 +131,20 @@ namespace wellsfargo.comBot
                 accounts.Add(webElement.GetAttributeValue("value", ""), code);
             }
 
+            _driver.SaveSession();
+            HttpCaller = new HttpCaller(true);
+            
             NormalLog($"{accounts.Count} accounts detected");
             var r = 1;
             foreach (var account in accounts)
             {
                 Display($"Downloading activity : {r}/{accounts.Count}");
                 r++;
-                await HttpCaller.DownloadFile(link, $"{outputCsvI.Text}/WF-{account.Value}-{activitiesFromI.Value:dd_MM_yyyy}-{DateTime.Now:dd_MM_yyyy}.csv", new Dictionary<string, string>
+                await HttpCaller.DownloadFile(link, $"{outputCsvI.Text}/WF-{account.Value}-{activitiesFromI.Value:MMddyyyy}-{DateTime.Now:MMddyyyy}.csv", new Dictionary<string, string>
                 {
                     { "selectedAccountId", account.Key },
-                    { "fromDate", activitiesFromI.Value.ToString("dd/MM/yyyy") },
-                    { "toDate", DateTime.Now.ToString("dd/MM/yyyy") },
+                    { "fromDate", activitiesFromI.Value.ToString("MM/dd/yyyy") },
+                    { "toDate", DateTime.Now.ToString("MM/dd/yyyy") },
                     { "fileFormat", "commaDelimited" },
                 });
 
@@ -262,7 +265,8 @@ namespace wellsfargo.comBot
                 {
                     var statementLink = statementLinks[n];
                     Display($"Downloading statement {n + 1}/{statementLinks.Count}");
-                    await HttpCaller.DownloadFile($"https://connect.secure.wellsfargo.com{statementLink.Url.Replace("\\u0026", "&")}", outputPdfI.Text + $"/WF-{code}-{statementLink.Period}-{statementLink.Year}.pdf");
+                    var p = statementLink.Period.Length == 1 ? $"0{statementLink.Period}" : statementLink.Period;
+                    await HttpCaller.DownloadFile($"https://connect.secure.wellsfargo.com{statementLink.Url.Replace("\\u0026", "&")}", outputPdfI.Text + $"/WF-{code}-{p}-{statementLink.Year}.pdf");
                     await Task.Delay(1000 * _delay);
                 }
             }
