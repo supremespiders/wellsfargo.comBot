@@ -35,6 +35,10 @@ namespace wellsfargo.comBot
             this.metroTabControl1 = new MetroFramework.Controls.MetroTabControl();
             this.metroTabPage1 = new MetroFramework.Controls.MetroTabPage();
             this.panel2 = new System.Windows.Forms.Panel();
+            this.accountsI = new MetroFramework.Controls.MetroTextBox();
+            this.label8 = new System.Windows.Forms.Label();
+            this.activitiesToI = new MetroFramework.Controls.MetroDateTime();
+            this.label7 = new System.Windows.Forms.Label();
             this.passI = new MetroFramework.Controls.MetroTextBox();
             this.label6 = new System.Windows.Forms.Label();
             this.userI = new MetroFramework.Controls.MetroTextBox();
@@ -147,6 +151,10 @@ namespace wellsfargo.comBot
             // panel2
             // 
             this.panel2.BackColor = System.Drawing.SystemColors.ButtonHighlight;
+            this.panel2.Controls.Add(this.accountsI);
+            this.panel2.Controls.Add(this.label8);
+            this.panel2.Controls.Add(this.activitiesToI);
+            this.panel2.Controls.Add(this.label7);
             this.panel2.Controls.Add(this.passI);
             this.panel2.Controls.Add(this.label6);
             this.panel2.Controls.Add(this.userI);
@@ -177,6 +185,74 @@ namespace wellsfargo.comBot
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(1019, 566);
             this.panel2.TabIndex = 14;
+            // 
+            // accountsI
+            // 
+            // 
+            // 
+            // 
+            this.accountsI.CustomButton.Image = null;
+            this.accountsI.CustomButton.Location = new System.Drawing.Point(431, 2);
+            this.accountsI.CustomButton.Margin = new System.Windows.Forms.Padding(5);
+            this.accountsI.CustomButton.Name = "";
+            this.accountsI.CustomButton.Size = new System.Drawing.Size(23, 23);
+            this.accountsI.CustomButton.Style = MetroFramework.MetroColorStyle.Blue;
+            this.accountsI.CustomButton.TabIndex = 1;
+            this.accountsI.CustomButton.Theme = MetroFramework.MetroThemeStyle.Light;
+            this.accountsI.CustomButton.UseSelectable = true;
+            this.accountsI.CustomButton.Visible = false;
+            this.accountsI.Lines = new string[0];
+            this.accountsI.Location = new System.Drawing.Point(515, 267);
+            this.accountsI.Margin = new System.Windows.Forms.Padding(4);
+            this.accountsI.MaxLength = 32767;
+            this.accountsI.Name = "accountsI";
+            this.accountsI.PasswordChar = '\0';
+            this.accountsI.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.accountsI.SelectedText = "";
+            this.accountsI.SelectionLength = 0;
+            this.accountsI.SelectionStart = 0;
+            this.accountsI.ShortcutsEnabled = true;
+            this.accountsI.Size = new System.Drawing.Size(457, 28);
+            this.accountsI.Style = MetroFramework.MetroColorStyle.Orange;
+            this.accountsI.TabIndex = 45;
+            this.accountsI.UseSelectable = true;
+            this.accountsI.WaterMarkColor = System.Drawing.Color.FromArgb(((int)(((byte)(109)))), ((int)(((byte)(109)))), ((int)(((byte)(109)))));
+            this.accountsI.WaterMarkFont = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Pixel);
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Font = new System.Drawing.Font("Verdana", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label8.ForeColor = System.Drawing.Color.Black;
+            this.label8.Location = new System.Drawing.Point(396, 267);
+            this.label8.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(87, 20);
+            this.label8.TabIndex = 44;
+            this.label8.Text = "Accounts";
+            // 
+            // activitiesToI
+            // 
+            this.activitiesToI.CustomFormat = "dd/MM/yyyy";
+            this.activitiesToI.Format = System.Windows.Forms.DateTimePickerFormat.Short;
+            this.activitiesToI.Location = new System.Drawing.Point(643, 336);
+            this.activitiesToI.MinimumSize = new System.Drawing.Size(0, 30);
+            this.activitiesToI.Name = "activitiesToI";
+            this.activitiesToI.Size = new System.Drawing.Size(220, 30);
+            this.activitiesToI.Style = MetroFramework.MetroColorStyle.Orange;
+            this.activitiesToI.TabIndex = 43;
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Font = new System.Drawing.Font("Verdana", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label7.ForeColor = System.Drawing.Color.Black;
+            this.label7.Location = new System.Drawing.Point(590, 343);
+            this.label7.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(27, 20);
+            this.label7.TabIndex = 42;
+            this.label7.Text = "To";
             // 
             // passI
             // 
@@ -650,7 +726,7 @@ namespace wellsfargo.comBot
             this.Name = "MainForm";
             this.Padding = new System.Windows.Forms.Padding(27, 74, 27, 25);
             this.Style = MetroFramework.MetroColorStyle.Orange;
-            this.Text = "         wellsfargo.comBot 1.02";
+            this.Text = "         wellsfargo.comBot 1.03";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
             this.Load += new System.EventHandler(this.Form1_Load);
             this.panel3.ResumeLayout(false);
@@ -666,6 +742,12 @@ namespace wellsfargo.comBot
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
         }
+        
+
+        private System.Windows.Forms.Label label7;
+        private MetroFramework.Controls.MetroDateTime activitiesToI;
+        private MetroFramework.Controls.MetroTextBox accountsI;
+        private System.Windows.Forms.Label label8;
 
         private System.Windows.Forms.Label label5;
         private MetroFramework.Controls.MetroTextBox userI;

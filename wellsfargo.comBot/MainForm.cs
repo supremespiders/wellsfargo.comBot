@@ -31,6 +31,7 @@ namespace wellsfargo.comBot
         private int _minYear;
         private int _maxMonth;
         private int _maxYear;
+        private List<string> _accounts;
 
         public MainForm()
         {
@@ -48,7 +49,7 @@ namespace wellsfargo.comBot
             options.AddArgument($"--load-extension={_path}/ext");
             ChromeDriverService service = ChromeDriverService.CreateDefaultService();
             service.HideCommandPromptWindow = true;
-            _driver = new ChromeDriver(service,options);
+            _driver = new ChromeDriver(service, options);
             //_driver.LoadSession("https://www.wellsfargo.com/");
             _driver.Navigate().GoToUrl("https://www.wellsfargo.com/");
             await Task.Delay(25000);
@@ -128,23 +129,35 @@ namespace wellsfargo.comBot
             {
                 var t = webElement.InnerText;
                 var code = t.Substring(t.IndexOf("...", StringComparison.Ordinal) + 3).Trim();
-                accounts.Add(webElement.GetAttributeValue("value", ""), code);
+                if (_accounts.Count != 0)
+                {
+                    if (_accounts.Contains(code))
+                        accounts.Add(webElement.GetAttributeValue("value", ""), code);
+                }
+                else
+                {
+                    accounts.Add(webElement.GetAttributeValue("value", ""), code);
+                }
             }
+
+            NormalLog($"{accounts.Count} accounts detected");
+            if (accounts.Count == 0)
+                return;
 
             _driver.SaveSession();
             HttpCaller = new HttpCaller(true);
-            
-            NormalLog($"{accounts.Count} accounts detected");
+
+
             var r = 1;
             foreach (var account in accounts)
             {
                 Display($"Downloading activity : {r}/{accounts.Count}");
                 r++;
-                await HttpCaller.DownloadFile(link, $"{outputCsvI.Text}/WF-{account.Value}-{activitiesFromI.Value:MMddyyyy}-{DateTime.Now:MMddyyyy}.csv", new Dictionary<string, string>
+                await HttpCaller.DownloadFile(link, $"{outputCsvI.Text}/WF-{account.Value}-{activitiesFromI.Value:MMddyyyy}-{activitiesToI.Value:MMddyyyy}.csv", new Dictionary<string, string>
                 {
                     { "selectedAccountId", account.Key },
                     { "fromDate", activitiesFromI.Value.ToString("MM/dd/yyyy") },
-                    { "toDate", DateTime.Now.ToString("MM/dd/yyyy") },
+                    { "toDate", activitiesToI.Value.ToString("MM/dd/yyyy") },
                     { "fileFormat", "commaDelimited" },
                 });
 
@@ -259,6 +272,7 @@ namespace wellsfargo.comBot
             {
                 var accountList = statementResponse.statementsDisclosuresInfo.accountList[i];
                 var code = accountList.accountDisplayName.Substring(accountList.accountDisplayName.IndexOf("...", StringComparison.Ordinal) + 3).Trim();
+                if (_accounts.Count != 0 && !_accounts.Contains(code)) continue;
                 Display($"Working on account {i + 1}/{statementResponse.statementsDisclosuresInfo.accountList.Count}");
                 var statementLinks = await GetAccountStatements($"https://connect.secure.wellsfargo.com{accountList.url.Replace("\\u0026", "&")}");
                 for (var n = 0; n < statementLinks.Count; n++)
@@ -637,6 +651,12 @@ namespace wellsfargo.comBot
             _maxMonth = toMonthI.SelectedIndex + 1;
             _minYear = int.Parse(fromYearI.Text);
             _maxYear = int.Parse(toYearI.Text);
+
+            _accounts = new List<string>();
+            if (accountsI.Text.Trim() != "")
+            {
+                _accounts = accountsI.Text.Trim().Split(',').ToList();
+            }
 
             //var s="let username='dkwfadmin';\nlet password='dkWFADMIN-321';\n\nvar login = async function () {\n    try{\n        let w=await Get(\"//span[text()='Welcome']\",10);\n        if(w!==null)\n        {\n            return;\n        }\n        getElementByXpath(\"//input[@id='userid']\").value=username;\n        getElementByXpath(\"//input[@id='password']\").value=password;\n        getElementByXpath(\"//input[@id='btnSignon']\").click();\n        let welcome=await Get(\"//span[text()='Welcome']\",10);\n        if(welcome!==null)\n            console.log(\"logged in\");\n    }catch (e) {\n     console.log(e);\n    }\n\n\n}\n\n\n\nconsole.log(\"injected : \"+window.location.href);\nlogin();\n\n\nfunction getElementByXpath(path, parent = null) {\n    return document.evaluate(path, parent || document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;\n}\n\nfunction getElementsByXPath(xpath, parent = null) {\n    let results = [];\n    let query = document.evaluate(xpath, parent || document,\n        null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);\n    for (let i = 0, length = query.snapshotLength; i < length; ++i) {\n        results.push(query.snapshotItem(i));\n    }\n    return results;\n}\n\nasync function Get(path,t) {\n    var i = 0;\n    while (true) {\n        const node = getElementByXpath(path);\n        if (node) {\n            console.log(path + \" \" + i)\n            return node;\n        }\n        i++;\n        if (i == t*2)\n            return null;\n        await new Promise(r => setTimeout(r, 500));\n    }\n}\n"
             var s = "let username='" + userI.Text + "';\nlet password='" + passI.Text + "';\n\nvar login = async function () {\n    try{\n        let w=await Get(\"//span[text()='Welcome']\",10);\n        if(w!==null)\n        {\n            return;\n        }\n        getElementByXpath(\"//input[@id='userid']\").value=username;\n        getElementByXpath(\"//input[@id='password']\").value=password;\n        getElementByXpath(\"//input[@id='btnSignon']\").click();\n        let welcome=await Get(\"//span[text()='Welcome']\",10);\n        if(welcome!==null)\n            console.log(\"logged in\");\n    }catch (e) {\n     console.log(e);\n    }\n\n\n}\n\n\n\nconsole.log(\"injected : \"+window.location.href);\nlogin();\n\n\nfunction getElementByXpath(path, parent = null) {\n    return document.evaluate(path, parent || document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;\n}\n\nfunction getElementsByXPath(xpath, parent = null) {\n    let results = [];\n    let query = document.evaluate(xpath, parent || document,\n        null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);\n    for (let i = 0, length = query.snapshotLength; i < length; ++i) {\n        results.push(query.snapshotItem(i));\n    }\n    return results;\n}\n\nasync function Get(path,t) {\n    var i = 0;\n    while (true) {\n        const node = getElementByXpath(path);\n        if (node) {\n            console.log(path + \" \" + i)\n            return node;\n        }\n        i++;\n        if (i == t*2)\n            return null;\n        await new Promise(r => setTimeout(r, 500));\n    }\n}\n";
